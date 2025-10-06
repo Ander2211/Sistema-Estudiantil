@@ -2,7 +2,7 @@ package com.poo.actividad.sistemaescolar.Controller;
 
 
 
-import com.poo.actividad.sistemaescolar.model.Evento;
+import com.poo.actividad.sistemaescolar.Model.Evento;
 import com.poo.actividad.sistemaescolar.utils.DBConnection;
 
 import java.sql.*;

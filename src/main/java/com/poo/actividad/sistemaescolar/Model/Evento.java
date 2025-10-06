@@ -1,4 +1,4 @@
-package com.poo.actividad.sistemaescolar.model;
+package com.poo.actividad.sistemaescolar.Model;
 
 
 public class Evento {
