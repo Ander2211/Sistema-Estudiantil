@@ -1,4 +1,3 @@
 # Sistema-Estudiantil
 
-## Configuracion de tomcat 
-https://github.com/Ander2211/Sistema-Estudiantil.git
+## Poner en la configuracion de Tomcat URL: http://localhost:8080/sistema_escolar_war/
