@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
-         version="6.0">
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+
+    <!-- Definición de roles -->
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <role-name>maestro</role-name>
+    </security-role>
+    <security-role>
+        <role-name>estudiante</role-name>
+    </security-role>
+
+    <!-- Protección de recursos -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Área de Administración</web-resource-name>
+            <url-pattern>/views/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Área de Maestros</web-resource-name>
+            <url-pattern>/views/maestro/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>maestro</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Área de Estudiantes</web-resource-name>
+            <url-pattern>/views/estudiante/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>estudiante</role-name>
+        </auth-constraint>
+    </security-constraint>
 </web-app>
