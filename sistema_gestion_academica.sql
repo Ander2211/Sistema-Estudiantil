@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 06-10-2025 a las 02:44:51
+-- Tiempo de generación: 11-10-2025 a las 02:30:02
 -- Versión del servidor: 9.1.0
 -- Versión de PHP: 8.3.14
 
@@ -74,14 +74,17 @@ CREATE TABLE IF NOT EXISTS `calendario` (
   `fecha_fin` date NOT NULL,
   `color` varchar(20) DEFAULT '#3788d8',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Volcado de datos para la tabla `calendario`
 --
 
 INSERT INTO `calendario` (`id`, `titulo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `color`) VALUES
-(10, 'Dia del Niño', '', '2025-10-01', '2025-10-01', '#37d757');
+(12, 'Tarea Lenguaje', '', '2025-10-07', '2025-10-07', '#fb9056'),
+(13, 'Entrega de tarea de ciencias para quinto', '', '2025-10-14', '2025-10-16', '#37d757'),
+(15, 'No hay clases', '', '2025-10-30', '2025-10-31', '#b0b0b0'),
+(16, 'Tarea de Moral', '', '2025-10-13', '2025-10-14', '#6551f5');
 
 -- --------------------------------------------------------
 
@@ -287,7 +290,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `activo` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `carnet` (`carnet`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
@@ -296,30 +299,14 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 INSERT INTO `usuario` (`id`, `carnet`, `nombre`, `email`, `contraseña`, `rol`, `grado`, `turno`, `activo`) VALUES
 (1, '00123', 'Anderson Hernández', NULL, '123', 'estudiante', 'Quinto', 'tarde', 1),
 (2, '00124', 'Ángel Martínez', NULL, '123', 'estudiante', 'Quinto', 'tarde', 1),
-(3, '00125', 'Daniel Lopez', NULL, '', 'estudiante', 'mañana', 'tarde', 1),
-(4, 'PROF001', 'Juan Carlos Menjívar', NULL, '', 'maestro', NULL, NULL, 1),
+(3, '00125', 'Daniel Lopez', '33null@g.com', '123', 'estudiante', 'Tercero', 'mañana', 1),
+(4, 'PROF001', 'Juan Carlos Menjívar', NULL, '124', 'maestro', NULL, NULL, 1),
 (5, 'admin001', 'Administrador Principal', 'admin@escuela.edu', 'admin123', 'admin', NULL, NULL, 1),
-(6, 'PROF002', 'María Elena García', 'maria@escuela.edu', '123', 'maestro', NULL, NULL, 1),
 (7, 'PROF003', 'Carlos Roberto Silva', 'carlos@escuela.edu', '123', 'maestro', NULL, NULL, 1);
 
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `asistencia`
---
-ALTER TABLE `asistencia`
-  ADD CONSTRAINT `fk_asistencia_estudiante` FOREIGN KEY (`estudiante_id`) REFERENCES `usuario` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_asistencia_maestro` FOREIGN KEY (`maestro_id`) REFERENCES `usuario` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_asistencia_materia` FOREIGN KEY (`materia_id`) REFERENCES `materia` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `estudiantesalon`
---
-ALTER TABLE `estudiantesalon`
-  ADD CONSTRAINT `fk_estudiantesalon_estudiante` FOREIGN KEY (`estudiante_id`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_estudiantesalon_salon` FOREIGN KEY (`salon_id`) REFERENCES `salon` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `horario`

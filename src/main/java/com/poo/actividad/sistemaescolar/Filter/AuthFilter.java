@@ -38,12 +38,6 @@ public class AuthFilter implements Filter {
 
         String rol = (String) session.getAttribute("rol");
 
-        // Permitir acceso al servlet de dashboard
-        if (path.equals("/dashboard")) {
-            chain.doFilter(request, response);
-            return;
-        }
-
         // Verificar acceso según el rol
         if (hasAccess(path, rol)) {
             chain.doFilter(request, response);
@@ -54,35 +48,38 @@ public class AuthFilter implements Filter {
 
     private boolean isPublicResource(String path) {
         return path.equals("/") ||
-               path.equals("/index.jsp") ||
-               path.equals("/views/auth/login.jsp") ||
-               path.equals("/login") ||
-               path.equals("/logout") ||
-               path.startsWith("/api/") ||  // Permitir acceso a todos los endpoints de la API
-               path.endsWith(".css") ||
-               path.endsWith(".js") ||
-               path.endsWith(".ico") ||
-               path.endsWith(".png") ||
-               path.endsWith(".jpg");
+                path.equals("/index.jsp") ||
+                path.equals("/views/auth/login.jsp") ||
+                path.equals("/login") ||
+                path.equals("/logout") ||
+                path.startsWith("/api/") ||
+                path.endsWith(".css") ||
+                path.endsWith(".js") ||
+                path.endsWith(".ico") ||
+                path.endsWith(".png") ||
+                path.endsWith(".jpg") ||
+                path.endsWith(".jsp"); // PERMITIR TODOS LOS JSPs
     }
 
     private boolean hasAccess(String path, String rol) {
-        // Recursos comunes son accesibles para todos los usuarios autenticados
-        if (path.startsWith("/views/common/")) {
-            return true;
-        }
-
         // Admin tiene acceso a todo
         if ("admin".equals(rol)) {
             return true;
         }
 
         // Verificar acceso específico por rol
-        return switch (rol) {
-            case "estudiante" -> path.startsWith("/views/estudiante/") || path.startsWith("/WEB-INF/views/estudiante/");
-            case "maestro" -> path.startsWith("/views/maestro/") || path.startsWith("/WEB-INF/views/maestro/");
-            default -> false;
-        };
+        switch (rol) {
+            case "estudiante":
+                return path.startsWith("/views/estudiante/") ||
+                        path.equals("/estudiante/dashboard") ||
+                        path.equals("/views/estudiante/dashboardEstudiante.jsp");
+            case "maestro":
+                return path.startsWith("/views/maestro/") ||
+                        path.equals("/maestro/dashboard") ||
+                        path.equals("/views/maestro/dashboardMaestro.jsp");
+            default:
+                return false;
+        }
     }
 
     @Override

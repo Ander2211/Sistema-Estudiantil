@@ -46,8 +46,24 @@ public class LoginServlet extends HttpServlet {
                         session.setAttribute("rol", rol);
                         session.setAttribute("carnet", carnet);
 
-                        // Redirigir al dashboard central
-                        response.sendRedirect(request.getContextPath() + "/dashboard");
+                        // REDIRECCIÓN DIRECTA SEGÚN ROL
+                        String redirectPath = request.getContextPath();
+                        switch (rol) {
+                            case "admin":
+                                redirectPath += "/admin/dashboard";
+                                break;
+                            case "maestro":
+                                redirectPath += "/maestro/dashboard";
+                                break;
+                            case "estudiante":
+                                redirectPath += "/estudiante/dashboard";
+                                break;
+                            default:
+                                redirectPath += "/dashboard";
+                        }
+
+                        response.sendRedirect(redirectPath);
+
                     } else {
                         request.setAttribute("error", "Carnet o contraseña incorrectos");
                         request.getRequestDispatcher("/views/auth/login.jsp").forward(request, response);

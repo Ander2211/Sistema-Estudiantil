@@ -19,25 +19,25 @@
                 <% if (session.getAttribute("rol") != null) {
                     String rol = (String) session.getAttribute("rol");
                 %>
-                    <% if (rol.equals("admin")) { %>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/views/admin/dashboardAdmin.jsp">Dashboard</a>
-                        </li>
-                    <% } else if (rol.equals("maestro")) { %>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/views/maestro/dashboardMaestro.jsp">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/views/maestro/horario.jsp">Horario</a>
-                        </li>
-                    <% } else if (rol.equals("estudiante")) { %>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/views/estudiante/dashboardEstudiante.jsp">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/views/estudiante/horario.jsp">Horario</a>
-                        </li>
-                    <% } %>
+                <% if (rol.equals("admin")) { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
+                </li>
+                <% } else if (rol.equals("maestro")) { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/maestro/dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/views/maestro/horario.jsp">Horario</a>
+                </li>
+                <% } else if (rol.equals("estudiante")) { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/estudiante/dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/views/common/horario.jsp">Horario</a>
+                </li>
+                <% } %>
                 <% } %>
             </ul>
             <div class="navbar-nav">
