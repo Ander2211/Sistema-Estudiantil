@@ -82,8 +82,12 @@ public class UsuarioController {
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
+            // Verificar si es error de duplicado
+            if (e.getErrorCode() == 1062) { // Código de error para duplicado en MySQL
+                throw new RuntimeException("El carnet '" + usuario.getCarnet() + "' ya existe en el sistema");
+            }
             e.printStackTrace();
-            return false;
+            throw new RuntimeException("Error al insertar usuario en la base de datos: " + e.getMessage());
         }
     }
 
@@ -123,4 +127,34 @@ public class UsuarioController {
             return false;
         }
     }
+
+    public String generarCarnetUnico(String rol) {
+        String prefijo = "";
+        switch (rol) {
+            case "estudiante": prefijo = "EST"; break;
+            case "maestro": prefijo = "PROF"; break;
+            case "admin": prefijo = "ADM"; break;
+            default: prefijo = "USR";
+        }
+
+        String sql = "SELECT MAX(CAST(SUBSTRING(carnet, 5) AS UNSIGNED)) FROM usuario WHERE carnet LIKE ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, prefijo + "%");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                int nextNum = 1;
+                if (rs.next() && rs.getString(1) != null) {
+                    nextNum = rs.getInt(1) + 1;
+                }
+                return prefijo + String.format("%03d", nextNum);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Fallback: usar timestamp
+            return prefijo + System.currentTimeMillis() % 1000;
+        }
+    }
+
 }

@@ -38,10 +38,22 @@ public class CrearUsuarioServlet extends HttpServlet {
         usuario.setTurno(turno);
         usuario.setActivo(true);
 
-        if (usuarioController.insertarUsuario(usuario)) {
-            response.sendRedirect(request.getContextPath() + "/usuarios?success=Usuario creado exitosamente");
-        } else {
-            response.sendRedirect(request.getContextPath() + "/crearUsuario?error=Error al crear usuario");
+        try {
+            if (usuarioController.insertarUsuario(usuario)) {
+                response.sendRedirect(request.getContextPath() + "/usuarios?success=Usuario creado exitosamente");
+            } else {
+                request.setAttribute("error", "Error al crear usuario");
+                request.getRequestDispatcher("/views/admin/crearUsuario.jsp").forward(request, response);
+            }
+        } catch (RuntimeException e) {
+            // Manejar error de carnet duplicado
+            request.setAttribute("error", e.getMessage());
+            request.setAttribute("usuario", usuario); // Mantener los datos del formulario
+            request.getRequestDispatcher("/views/admin/crearUsuario.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("error", "Error inesperado: " + e.getMessage());
+            request.setAttribute("usuario", usuario); // Mantener los datos del formulario
+            request.getRequestDispatcher("/views/admin/crearUsuario.jsp").forward(request, response);
         }
     }
 }
