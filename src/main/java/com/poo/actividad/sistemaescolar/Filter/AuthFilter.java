@@ -57,8 +57,7 @@ public class AuthFilter implements Filter {
                 path.endsWith(".js") ||
                 path.endsWith(".ico") ||
                 path.endsWith(".png") ||
-                path.endsWith(".jpg") ||
-                path.endsWith(".jsp"); // PERMITIR TODOS LOS JSPs
+                path.endsWith(".jpg") ;
     }
 
     private boolean hasAccess(String path, String rol) {

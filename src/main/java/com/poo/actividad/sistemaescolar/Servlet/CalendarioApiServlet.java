@@ -40,10 +40,10 @@ public class CalendarioApiServlet extends HttpServlet {
         JSONObject json = new JSONObject(body);
 
         Evento e = new Evento();
-        e.setTitulo(json.getString("titulo"));
-        e.setDescripcion(json.optString("descripcion", ""));
-        e.setFecha_inicio(json.getString("fecha_inicio"));
-        e.setFecha_fin(json.getString("fecha_fin"));
+        e.setTitulo(json.getString("title"));
+        e.setDescripcion(json.optString("description", ""));
+        e.setFecha_inicio(json.getString("start"));
+        e.setFecha_fin(json.getString("end"));
         e.setColor(json.optString("color", "#3788d8"));
 
         dao.agregarEvento(e);
@@ -58,10 +58,10 @@ public class CalendarioApiServlet extends HttpServlet {
         JSONObject json = new JSONObject(body);
 
         Evento e = new Evento();
-        e.setTitulo(json.getString("titulo"));
-        e.setDescripcion(json.optString("descripcion", ""));
-        e.setFecha_inicio(json.getString("fecha_inicio"));
-        e.setFecha_fin(json.getString("fecha_fin"));
+        e.setTitulo(json.getString("title"));
+        e.setDescripcion(json.optString("description", ""));
+        e.setFecha_inicio(json.getString("start"));
+        e.setFecha_fin(json.getString("end"));
         e.setColor(json.optString("color", "#3788d8"));
 
         dao.actualizarEvento(id, e);

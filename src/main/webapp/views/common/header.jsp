@@ -35,7 +35,7 @@
                     <a class="nav-link" href="${pageContext.request.contextPath}/estudiante/dashboard">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/views/common/horario.jsp">Horario</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/views/common/ver-horario.jsp">Horario</a>
                 </li>
                 <% } %>
                 <% } %>

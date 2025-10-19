@@ -222,7 +222,7 @@
                     </div>
                     <h5 class="card-title">Gestión de Grados</h5>
                     <p class="card-text text-muted">Administrar grados, secciones y niveles académicos.</p>
-                    <a href="#" class="btn btn-warning">
+                    <a href="http://127.0.0.1:8000/admin/grados" class="btn btn-warning">
                         <i class="bi bi-diagram-3 me-2"></i>Gestionar Grados
                     </a>
                 </div>
@@ -237,7 +237,7 @@
                     </div>
                     <h5 class="card-title">Asignación de Horarios</h5>
                     <p class="card-text text-muted">Crear y gestionar horarios de clases y actividades.</p>
-                    <a href="#" class="btn btn-danger">
+                    <a href="http://127.0.0.1:8000/admin/horarios" class="btn btn-danger">
                         <i class="bi bi-clock me-2"></i>Gestionar Horarios
                     </a>
                 </div>

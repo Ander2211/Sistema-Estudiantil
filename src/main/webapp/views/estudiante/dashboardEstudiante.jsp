@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Mi Horario</h5>
                     <p class="card-text">Ver horario de clases.</p>
-                    <a href="${pageContext.request.contextPath}/views/common/horario.jsp" class="btn btn-primary">Ver Horario</a>
+                    <a href="${pageContext.request.contextPath}/views/common/ver-horario.jsp" class="btn btn-primary">Ver Horario</a>
                 </div>
             </div>
         </div>
