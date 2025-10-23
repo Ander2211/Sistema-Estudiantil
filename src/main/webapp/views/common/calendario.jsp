@@ -15,27 +15,34 @@
 <body>
 <jsp:include page="header.jsp"/>
 <div class="container mt-4">
-    <h2>Calendario de Actividades Escolares</h2>
-
     <div class="row">
         <div class="col-md-8">
-            <div id="calendar"></div>
+            <div class="card">
+                <div class="card-body">
+                    <h4>Calendario</h4>
+                    <div id="calendar"></div>
+                </div>
+            </div>
         </div>
         <div class="col-md-4">
-            <div class="card p-3">
-                <h5>Lista de actividades</h5>
-                <table class="table table-striped" id="tablaEventos">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Título</th>
-                            <th>Inicio</th>
-                            <th>Fin</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h4>Actividades</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="tablaEventos">
+                            <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Inicio</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -46,7 +53,8 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     let calendar;
-    const apiUrl = 'http://localhost:8080/sistema_escolar_war/api/calendario';
+    // Usar contexto de la aplicación en lugar de URL hardcodeada
+    const apiUrl = '${pageContext.request.contextPath}/api/calendario';
 
     document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar');
@@ -57,63 +65,151 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            events: function(fetchInfo, successCallback, failureCallback) {
-                axios.get(apiUrl)
-                    .then(function(response) {
-                        const eventos = response.data.map(evento => ({
-                            id: evento.id,
-                            title: evento.title,
-                            start: evento.start,
-                            end: evento.end,
-                            color: evento.color || '#37d757',
-                            description: evento.description || ''
-                        }));
-                        successCallback(eventos);
-                        actualizarTablaEventos(eventos);
-                    })
-                    .catch(function(error) {
-                        console.error('Error al cargar eventos:', error);
-                        failureCallback(error);
-                    });
+            events: cargarEventos,
+            eventClick: function(info) {
+                alert('Evento: ' + info.event.title + '\nDescripción: ' + (info.event.extendedProps.description || 'Sin descripción'));
             }
         });
         calendar.render();
+
+        // Configurar el formulario
+        document.getElementById('eventoForm').addEventListener('submit', guardarEvento);
+
+        // Cargar eventos inicialmente
+        cargarEventos();
     });
+
+    function cargarEventos(fetchInfo, successCallback, failureCallback) {
+        axios.get(apiUrl)
+            .then(function(response) {
+                const eventos = response.data.map(function(evento) {
+                    return {
+                        id: evento.id,
+                        title: evento.title,
+                        start: evento.start,
+                        end: evento.end,
+                        color: evento.color || '#37d757',
+                        description: evento.description || '',
+                        extendedProps: {
+                            description: evento.description || ''
+                        }
+                    };
+                });
+
+                if (successCallback) {
+                    successCallback(eventos);
+                }
+                actualizarTablaEventos(eventos);
+            })
+            .catch(function(error) {
+                console.error('Error al cargar eventos:', error);
+                if (failureCallback) {
+                    failureCallback(error);
+                }
+                alert('Error al cargar los eventos');
+            });
+    }
 
     function actualizarTablaEventos(eventos) {
         const tbody = document.querySelector('#tablaEventos tbody');
         tbody.innerHTML = '';
 
-        eventos.forEach(evento => {
+        eventos.forEach(function(evento) {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${evento.id}</td>
-                <td>${evento.title}</td>
-                <td>${evento.start}</td>
-                <td>${evento.end}</td>
-                <td>
-                    <button class="btn btn-sm btn-info" onclick="verEvento(${evento.id})">Ver</button>
-                </td>
-            `;
+
+            // Crear celdas manualmente en lugar de usar template literals
+            const tdTitulo = document.createElement('td');
+            tdTitulo.textContent = evento.title;
+
+            const tdFecha = document.createElement('td');
+            tdFecha.textContent = formatDate(evento.start);
+
+            const tdAcciones = document.createElement('td');
+            const btnEliminar = document.createElement('button');
+            btnEliminar.className = 'btn btn-sm btn-danger';
+            btnEliminar.textContent = 'Eliminar';
+            btnEliminar.onclick = function() {
+                eliminarEvento(evento.id);
+            };
+            tdAcciones.appendChild(btnEliminar);
+
+            tr.appendChild(tdTitulo);
+            tr.appendChild(tdFecha);
+            tr.appendChild(tdAcciones);
+
             tbody.appendChild(tr);
         });
     }
 
-    function verEvento(id) {
-        axios.get(`${apiUrl}/${id}`)
+    function guardarEvento(e) {
+        e.preventDefault();
+
+        const title = document.getElementById('title').value;
+        const start = document.getElementById('start').value;
+        const end = document.getElementById('end').value;
+
+        if (!title || !start || !end) {
+            alert('Por favor, complete todos los campos obligatorios');
+            return;
+        }
+
+        const nuevoEvento = {
+            title: title,
+            start: start,
+            end: end,
+            color: document.getElementById('color').value,
+            description: document.getElementById('description').value
+        };
+
+        axios.post(apiUrl, nuevoEvento)
             .then(function(response) {
-                const evento = response.data;
-                alert(`
-                    Título: ${evento.title}
-                    Inicio: ${evento.start}
-                    Fin: ${evento.end}
-                    Descripción: ${evento.description || 'Sin descripción'}
-                `);
+                if (response.data && response.data.status === 'ok') {
+                    alert('Actividad guardada con éxito');
+                    document.getElementById('eventoForm').reset();
+                    calendar.refetchEvents();
+                } else {
+                    throw new Error('Error en la respuesta del servidor');
+                }
             })
             .catch(function(error) {
-                console.error('Error al obtener detalles del evento:', error);
-                alert('Error al obtener detalles del evento');
+                console.error('Error al guardar evento:', error);
+                alert('Error al guardar la actividad: ' + error.message);
             });
+    }
+
+    function eliminarEvento(id) {
+        if (confirm('¿Estás seguro de eliminar esta actividad?')) {
+            axios.delete(apiUrl + '/' + id)
+                .then(function(response) {
+                    if (response.data && response.data.status === 'ok') {
+                        alert('Actividad eliminada con éxito');
+                        calendar.refetchEvents();
+                    } else {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error al eliminar evento:', error);
+                    alert('Error al eliminar la actividad: ' + error.message);
+                });
+        }
+    }
+
+    function formatDate(dateString) {
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                return dateString; // Retorna la cadena original si no es una fecha válida
+            }
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+        } catch (error) {
+            console.error('Error formateando fecha:', error);
+            return dateString;
+        }
     }
 </script>
 </body>

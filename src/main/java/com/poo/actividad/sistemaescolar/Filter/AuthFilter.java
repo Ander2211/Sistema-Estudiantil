@@ -70,10 +70,12 @@ public class AuthFilter implements Filter {
         switch (rol) {
             case "estudiante":
                 return path.startsWith("/views/estudiante/") ||
+                        path.startsWith("/views/common/") ||
                         path.equals("/estudiante/dashboard") ||
                         path.equals("/views/estudiante/dashboardEstudiante.jsp");
             case "maestro":
                 return path.startsWith("/views/maestro/") ||
+                        path.startsWith("/views/common/") ||
                         path.equals("/maestro/dashboard") ||
                         path.equals("/views/maestro/dashboardMaestro.jsp");
             default:

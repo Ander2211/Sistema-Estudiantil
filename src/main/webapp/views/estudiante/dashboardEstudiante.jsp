@@ -29,6 +29,15 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Actividades</h5>
+                    <p class="card-text">Ver calificaciones y progreso.</p>
+                    <a href="../common/calendario.jsp" class="btn btn-primary">Actividades</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
